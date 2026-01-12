@@ -141,7 +141,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Frontend origins allowed for CORS.
 # In production, this should be your frontend's domain.
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS').split(',')
+_cors_env = os.getenv('CORS_ALLOWED_ORIGINS', '')
+# Split, strip whitespace and trailing slashes, and ignore empty entries
+CORS_ALLOWED_ORIGINS = [origin.strip().rstrip('/') for origin in _cors_env.split(',') if origin.strip()]
 
 
 REST_FRAMEWORK = {
