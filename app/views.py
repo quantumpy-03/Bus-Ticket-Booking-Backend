@@ -2,8 +2,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .models import Bus, Booking, CustomUser
-from .serializers import BusSerializer, BookingSerializer, CustomUserSerializer
+from .models import Bus, Booking, CustomUser, Route
+from .serializers import BusSerializer, BookingSerializer, CustomUserSerializer, RouteSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.decorators import api_view, permission_classes, action
@@ -28,12 +28,34 @@ class ProfileView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class RouteViewSet(viewsets.ModelViewSet):
+    queryset = Route.objects.all()
+    serializer_class = RouteSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['origin_city', 'destination_city']
+    ordering_fields = ['origin_city', 'destination_city']
+
 class BusViewSet(viewsets.ModelViewSet):
     queryset = Bus.objects.all()
     serializer_class = BusSerializer
     filter_backends = [SearchFilter, OrderingFilter]
-    search_fields = ['name', 'owner', 'destination']
+    search_fields = ['name', 'owner', 'route__origin_city', 'route__destination_city']
     ordering_fields = ['name', 'seats']
+
+    def get_queryset(self):
+        origin = self.request.query_params.get('origin_city')
+        destination = self.request.query_params.get('destination_city')
+        
+        queryset = Bus.objects.all()
+        
+        if origin and destination:
+            queryset = queryset.filter(
+                route__origin_city=origin,
+                route__destination_city=destination
+            )
+        
+        return queryset
 
 
 class BookingViewSet(viewsets.ModelViewSet):

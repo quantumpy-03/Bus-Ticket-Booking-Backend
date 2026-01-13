@@ -24,7 +24,8 @@ class Route(models.Model):
 class Bus(models.Model):
     name = models.CharField(max_length=100)
     owner = models.CharField(max_length=50)
-    seats = models.IntegerField()
+    seats = models.IntegerField(null=False, blank=True)
+    price = models.PositiveIntegerField(null=True, blank=True)
     route = models.ForeignKey(Route, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):

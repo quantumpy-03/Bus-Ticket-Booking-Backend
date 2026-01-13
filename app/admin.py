@@ -23,12 +23,12 @@ class RouteAdmin(admin.ModelAdmin):
 # Register Bus Model with customization
 @admin.register(Bus)
 class BusAdmin(admin.ModelAdmin):
-    list_display = ('name', 'owner', 'seats', 'route')
+    list_display = ('name', 'owner', 'seats', 'route', 'price')
     search_fields = ('name', 'owner')
     list_filter = ('owner',)
     fieldsets = (
         ('Bus Information', {
-            'fields': ('name', 'owner', 'seats')
+            'fields': ('name', 'owner', 'seats', 'price')
         }),
         ('Route Assignment', {
             'fields': ('route',),

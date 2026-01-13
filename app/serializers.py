@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Bus, Booking
+from .models import CustomUser, Bus, Booking, Route
 from datetime import date
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -26,7 +26,17 @@ class CustomUserSerializer(serializers.ModelSerializer):
             user.save()
         return user
 
+# ...existing code...
+
+class RouteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Route
+        fields = "__all__"
+
+
 class BusSerializer(serializers.ModelSerializer):
+    route = RouteSerializer(read_only=True)
+    
     class Meta:
         model = Bus
         fields = "__all__"

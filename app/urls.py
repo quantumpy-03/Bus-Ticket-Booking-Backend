@@ -1,11 +1,12 @@
 from django.urls import path, include
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import BookingViewSet, BusViewSet, CustomUserViewSet, create_razorpay_order, verify_razorpay_payment, ProfileView, cancel_booking
+from .views import BookingViewSet, BusViewSet, CustomUserViewSet, create_razorpay_order, verify_razorpay_payment, ProfileView, cancel_booking, RouteViewSet
 
 router = routers.DefaultRouter()
 
 router.register("buses", BusViewSet, basename="buses")
+router.register("routes", RouteViewSet, basename="routes")
 router.register("book", BookingViewSet, basename="book")
 router.register("users", CustomUserViewSet, basename="users")
 
